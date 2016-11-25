@@ -14,12 +14,7 @@ public class ScrollParallaxImageView extends ImageView implements ViewTreeObserv
     private int[] viewLocation = new int[2];
     private boolean enableScrollParallax = true;
 
-    // view's width and height
-    private int vWidth;
-    private int vHeight;
-    // device's width and height
-    private int dWidth;
-    private int dHeight;
+    private ParallaxStyle parallaxStyles;
 
     public ScrollParallaxImageView(Context context) {
         this(context, null);
@@ -31,17 +26,6 @@ public class ScrollParallaxImageView extends ImageView implements ViewTreeObserv
 
     public ScrollParallaxImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        super.setScaleType(ScaleType.CENTER_CROP);
-
-        dWidth = getResources().getDisplayMetrics().widthPixels;
-        dHeight = getResources().getDisplayMetrics().heightPixels;
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        vWidth = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
-        vHeight = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
     }
 
     @Override
@@ -51,36 +35,9 @@ public class ScrollParallaxImageView extends ImageView implements ViewTreeObserv
             return;
         }
 
-        int iWidth = getDrawable().getIntrinsicWidth();
-        int iHeight = getDrawable().getIntrinsicHeight();
-        if (iWidth <= 0 || iHeight <= 0) {
-            super.onDraw(canvas);
-            return;
-        }
-
-        getLocationInWindow(viewLocation);
-        if (iWidth * vHeight > vWidth * iHeight) {
-            int currentX = viewLocation[0];
-            if (currentX < -vWidth) {
-                currentX = -vWidth;
-            } else if (currentX > dWidth) {
-                currentX = dWidth;
-            }
-            float imgScale = (float) vHeight / (float) iHeight;
-            float max_dx = Math.abs((vWidth - iWidth * imgScale) * 0.5f);
-            float translateX = -(2 * max_dx * currentX + max_dx * (vWidth - dWidth)) / (vWidth + dWidth);
-            canvas.translate(translateX, 0);
-        } else {
-            int currentY = viewLocation[1];
-            if (currentY < -vHeight) {
-                currentY = -vHeight;
-            } else if (currentY > dHeight) {
-                currentY = dHeight;
-            }
-            float imgScale = (float) vWidth / (float) iWidth;
-            float max_dy = Math.abs((vHeight - iHeight * imgScale) * 0.5f);
-            float translateY = -(2 * max_dy * currentY + max_dy * (vHeight - dHeight)) / (vHeight + dHeight);
-            canvas.translate(0, translateY);
+        if (parallaxStyles != null){
+            getLocationInWindow(viewLocation);
+            parallaxStyles.transform(this, canvas, viewLocation[0], viewLocation[1]);
         }
 
         super.onDraw(canvas);
@@ -105,12 +62,21 @@ public class ScrollParallaxImageView extends ImageView implements ViewTreeObserv
         }
     }
 
-    @Override
-    public void setScaleType(ScaleType scaleType) {
-        // The scaleType must be CENTER_CROP, so do nothing in this method.
+    public void setParallaxStyles(ParallaxStyle styles) {
+        if (parallaxStyles != null) {
+            parallaxStyles.onDetachedFromImageView(this);
+        }
+        parallaxStyles = styles;
+        parallaxStyles.onAttachedToImageView(this);
     }
 
     public void setEnableScrollParallax(boolean enableScrollParallax) {
         this.enableScrollParallax = enableScrollParallax;
+    }
+
+    public interface ParallaxStyle {
+        void onAttachedToImageView(ScrollParallaxImageView view);
+        void onDetachedFromImageView(ScrollParallaxImageView view);
+        void transform(ScrollParallaxImageView view, Canvas canvas, int x, int y);
     }
 }
