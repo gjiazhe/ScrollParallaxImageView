@@ -7,9 +7,9 @@ import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
 
 /**
  * When the imageView is scrolling vertically, the image in imageView will be
- * also is scrolling vertically.
+ * also scrolling vertically if the image' height is bigger than imageView's height.
  *
- * The image will not over scroll to it's view bounds
+ * The image will not over scroll to it's view bounds.
  *
  * Note: it only supports imageView with CENTER_CROP scale type.
  *
