@@ -33,6 +33,11 @@ public class VerticalAlphaStyle implements ScrollParallaxImageView.ParallaxStyle
         // device's height
         int dHeight = view.getResources().getDisplayMetrics().heightPixels;
 
+        if (vHeight >= dHeight) {
+            // Do nothing if imageView's height is bigger than device's height.
+            return;
+        }
+
         float alpha;
         int pivot = (dHeight - vHeight) / 2;
         if (y <= pivot) {
