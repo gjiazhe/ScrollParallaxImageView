@@ -26,6 +26,10 @@ public class VerticalAlphaStyle implements ScrollParallaxImageView.ParallaxStyle
         this.finalAlpha = finalAlpha;
     }
 
+    public void setFinalAlpha(float alpha) {
+        finalAlpha = alpha;
+    }
+
     @Override
     public void transform(ScrollParallaxImageView view, Canvas canvas, int x, int y) {
         // view's height

@@ -20,7 +20,14 @@ public class HorizontalAlphaStyle implements ScrollParallaxImageView.ParallaxSty
     public HorizontalAlphaStyle() {}
 
     public HorizontalAlphaStyle(float finalAlpha) {
+        if (finalAlpha < 0 || finalAlpha > 1.0f) {
+            throw new IllegalArgumentException("the alpha must between 0 and 1.");
+        }
         this.finalAlpha = finalAlpha;
+    }
+
+    public void setFinalAlpha(float alpha) {
+        finalAlpha = alpha;
     }
 
     @Override
