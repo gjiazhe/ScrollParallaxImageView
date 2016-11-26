@@ -58,7 +58,7 @@ public class VerticalMovingStyle implements ScrollParallaxImageView.ParallaxStyl
             }
 
             float imgScale = (float) vWidth / (float) iWidth;
-            float max_dy = Math.abs((vHeight - iHeight * imgScale) * 0.5f);
+            float max_dy = Math.abs((iHeight * imgScale - vHeight) * 0.5f);
             float translateY = -(2 * max_dy * y + max_dy * (vHeight - dHeight)) / (vHeight + dHeight);
             canvas.translate(0, translateY);
         }

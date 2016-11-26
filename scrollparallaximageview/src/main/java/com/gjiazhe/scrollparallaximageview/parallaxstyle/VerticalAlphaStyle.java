@@ -28,7 +28,7 @@ public class VerticalAlphaStyle implements ScrollParallaxImageView.ParallaxStyle
 
     @Override
     public void transform(ScrollParallaxImageView view, Canvas canvas, int x, int y) {
-        // view's width and height
+        // view's height
         int vHeight = view.getHeight() - view.getPaddingTop() - view.getPaddingBottom();
         // device's height
         int dHeight = view.getResources().getDisplayMetrics().heightPixels;
