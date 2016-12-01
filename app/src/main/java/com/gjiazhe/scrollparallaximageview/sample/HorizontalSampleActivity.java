@@ -27,9 +27,9 @@ public class HorizontalSampleActivity extends AppCompatActivity {
         rvScale.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvAlpha.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        rvMoving.setAdapter(new MyAdapter(new HorizontalMovingStyle()));
-        rvScale.setAdapter(new MyAdapter(new HorizontalScaleStyle()));
-        rvAlpha.setAdapter(new MyAdapter(new HorizontalAlphaStyle()));
+        rvMoving.setAdapter(new MyAdapter(new HorizontalMovingStyle(new HorizontalScaleStyle())));
+        rvScale.setAdapter(new MyAdapter(new HorizontalScaleStyle(new HorizontalAlphaStyle())));
+        rvAlpha.setAdapter(new MyAdapter(new HorizontalAlphaStyle(new HorizontalMovingStyle())));
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{

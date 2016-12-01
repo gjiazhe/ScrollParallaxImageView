@@ -79,4 +79,8 @@ public class ScrollParallaxImageView extends ImageView implements ViewTreeObserv
         void onDetachedFromImageView(ScrollParallaxImageView view);
         void transform(ScrollParallaxImageView view, Canvas canvas, int x, int y);
     }
+
+    public interface HorizontalParallaxStyle extends ParallaxStyle {}
+
+    public interface VerticalParallaxStyle extends ParallaxStyle {}
 }

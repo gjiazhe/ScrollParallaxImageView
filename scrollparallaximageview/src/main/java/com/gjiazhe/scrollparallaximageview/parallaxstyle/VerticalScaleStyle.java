@@ -1,6 +1,7 @@
 package com.gjiazhe.scrollparallaximageview.parallaxstyle;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
 
@@ -14,17 +15,32 @@ import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
  * Created by gjz on 25/11/2016.
  */
 
-public class VerticalScaleStyle implements ScrollParallaxImageView.ParallaxStyle {
+public class VerticalScaleStyle implements ScrollParallaxImageView.VerticalParallaxStyle {
     private float finalScaleRatio = 0.7f;
 
-    public VerticalScaleStyle(){}
+    private ScrollParallaxImageView.VerticalParallaxStyle innerVerticalStyle;
+
+    public VerticalScaleStyle() {}
+
+    public VerticalScaleStyle(@NonNull ScrollParallaxImageView.VerticalParallaxStyle style) {
+        this.innerVerticalStyle = style;
+    }
 
     public VerticalScaleStyle(float finalScaleRatio) {
         this.finalScaleRatio = finalScaleRatio;
     }
 
+    public VerticalScaleStyle(float finalScaleRatio, @NonNull ScrollParallaxImageView.VerticalParallaxStyle style) {
+        this(finalScaleRatio);
+        this.innerVerticalStyle = style;
+    }
+
     public void setFinalScaleRatio(float scale) {
         finalScaleRatio = scale;
+    }
+
+    public void setInnerVerticalStyle(ScrollParallaxImageView.VerticalParallaxStyle innerVerticalStyle) {
+        this.innerVerticalStyle = innerVerticalStyle;
     }
 
     @Override
@@ -49,15 +65,23 @@ public class VerticalScaleStyle implements ScrollParallaxImageView.ParallaxStyle
         }
 
         canvas.scale(scale, scale, vWidth/2, vHeight/2);
+
+        if (innerVerticalStyle != null) {
+            innerVerticalStyle.transform(view, canvas, x, y);
+        }
     }
 
     @Override
     public void onAttachedToImageView(ScrollParallaxImageView view) {
-
+        if (innerVerticalStyle != null) {
+            innerVerticalStyle.onAttachedToImageView(view);
+        }
     }
 
     @Override
     public void onDetachedFromImageView(ScrollParallaxImageView view) {
-
+        if (innerVerticalStyle != null) {
+            innerVerticalStyle.onDetachedFromImageView(view);
+        }
     }
 }
