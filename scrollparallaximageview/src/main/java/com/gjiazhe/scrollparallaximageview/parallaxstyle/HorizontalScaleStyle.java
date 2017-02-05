@@ -1,8 +1,11 @@
 package com.gjiazhe.scrollparallaximageview.parallaxstyle;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
+
+import java.io.FileInputStream;
 
 /**
  * When the imageView is scrolling horizontally, the image in imageView will be scaled.
@@ -14,17 +17,32 @@ import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
  * Created by gjz on 26/11/2016.
  */
 
-public class HorizontalScaleStyle implements ScrollParallaxImageView.ParallaxStyle {
+public class HorizontalScaleStyle implements ScrollParallaxImageView.HorizontalParallaxStyle {
     private float finalScaleRatio = 0.7f;
 
+    private ScrollParallaxImageView.HorizontalParallaxStyle innerHorizontalStyle;
+
     public HorizontalScaleStyle() {}
+
+    public HorizontalScaleStyle(@NonNull ScrollParallaxImageView.HorizontalParallaxStyle style) {
+        this.innerHorizontalStyle = style;
+    }
 
     public HorizontalScaleStyle(float finalScaleRatio) {
         this.finalScaleRatio = finalScaleRatio;
     }
 
+    public HorizontalScaleStyle(float finalScaleRatio, @NonNull ScrollParallaxImageView.HorizontalParallaxStyle style) {
+        this(finalScaleRatio);
+        this.innerHorizontalStyle = style;
+    }
+
     public void setFinalScaleRatio(float scale) {
         finalScaleRatio = scale;
+    }
+
+    public void setInnerHorizontalStyle(ScrollParallaxImageView.HorizontalParallaxStyle innerHorizontalStyle) {
+        this.innerHorizontalStyle = innerHorizontalStyle;
     }
 
     @Override
@@ -49,15 +67,23 @@ public class HorizontalScaleStyle implements ScrollParallaxImageView.ParallaxSty
         }
 
         canvas.scale(scale, scale, vWidth/2, vHeight/2);
+
+        if (innerHorizontalStyle != null) {
+            innerHorizontalStyle.transform(view, canvas, x, y);
+        }
     }
 
     @Override
     public void onAttachedToImageView(ScrollParallaxImageView view) {
-
+        if (innerHorizontalStyle != null) {
+            innerHorizontalStyle.onAttachedToImageView(view);
+        }
     }
 
     @Override
     public void onDetachedFromImageView(ScrollParallaxImageView view) {
-
+        if (innerHorizontalStyle != null) {
+            innerHorizontalStyle.onDetachedFromImageView(view);
+        }
     }
 }

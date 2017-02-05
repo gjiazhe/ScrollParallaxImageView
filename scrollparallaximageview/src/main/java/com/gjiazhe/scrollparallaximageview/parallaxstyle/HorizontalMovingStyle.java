@@ -1,6 +1,7 @@
 package com.gjiazhe.scrollparallaximageview.parallaxstyle;
 
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
@@ -16,16 +17,34 @@ import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
  * Created by gjz on 26/11/2016.
  */
 
-public class HorizontalMovingStyle implements ScrollParallaxImageView.ParallaxStyle {
+public class HorizontalMovingStyle implements ScrollParallaxImageView.HorizontalParallaxStyle {
+    private ScrollParallaxImageView.HorizontalParallaxStyle innerHorizontalStyle;
+
+    public HorizontalMovingStyle() {}
+
+    public HorizontalMovingStyle(@NonNull ScrollParallaxImageView.HorizontalParallaxStyle style) {
+        this.innerHorizontalStyle = style;
+    }
+
+    public void setInnerHorizontalStyle(ScrollParallaxImageView.HorizontalParallaxStyle innerHorizontalStyle) {
+        this.innerHorizontalStyle = innerHorizontalStyle;
+    }
+
     @Override
     public void onAttachedToImageView(ScrollParallaxImageView view) {
         // only supports CENTER_CROP
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        if (innerHorizontalStyle != null) {
+            innerHorizontalStyle.onAttachedToImageView(view);
+        }
     }
 
     @Override
     public void onDetachedFromImageView(ScrollParallaxImageView view) {
-
+        if (innerHorizontalStyle != null) {
+            innerHorizontalStyle.onDetachedFromImageView(view);
+        }
     }
 
     @Override
@@ -60,6 +79,10 @@ public class HorizontalMovingStyle implements ScrollParallaxImageView.ParallaxSt
             float max_dx = Math.abs((iWidth * imgScale - vWidth) * 0.5f);
             float translateX = -(2 * max_dx * x + max_dx * (vWidth - dWidth)) / (vWidth + dWidth);
             canvas.translate(translateX, 0);
+        }
+
+        if (innerHorizontalStyle != null) {
+            innerHorizontalStyle.transform(view, canvas, x, y);
         }
     }
 }

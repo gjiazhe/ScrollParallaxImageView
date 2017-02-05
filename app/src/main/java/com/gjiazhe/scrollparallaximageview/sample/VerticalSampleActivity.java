@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
+import com.gjiazhe.scrollparallaximageview.parallaxstyle.VerticalAlphaStyle;
 import com.gjiazhe.scrollparallaximageview.parallaxstyle.VerticalMovingStyle;
+import com.gjiazhe.scrollparallaximageview.parallaxstyle.VerticalScaleStyle;
 
 public class VerticalSampleActivity extends AppCompatActivity {
 
@@ -23,7 +25,7 @@ public class VerticalSampleActivity extends AppCompatActivity {
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private VerticalMovingStyle verticalMovingStyle = new VerticalMovingStyle();
+        private VerticalMovingStyle verticalMovingStyle = new VerticalMovingStyle(new VerticalAlphaStyle(new VerticalScaleStyle()));
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
